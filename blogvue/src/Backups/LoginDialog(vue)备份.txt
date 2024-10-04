@@ -1,0 +1,135 @@
+<template>
+  <div>
+    <el-dialog 
+      title="登录" 
+      v-model="loginDialogVisible"
+      width="500"
+      destroy-on-close
+      center
+      @close="resetForm"
+    >
+      <el-form
+        :model="loginPasswordform"
+        :rules="loginPasswordRule"
+        size="large"
+        ref="loginPasswordRef"
+      >
+        <el-form-item prop="username">
+          <el-input
+            v-model.trim="loginPasswordform.username"
+            placeholder="请输入账号"
+            prefix-icon="User"
+          />
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+            show-password
+            type="password"
+            placeholder="请输入密码"
+            v-model.trim="loginPasswordform.password"
+            prefix-icon="Lock"
+          >
+          </el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="primary"
+            style="width: 100%"
+            @click="loginPasswordSubmitCheck()"
+            >登录</el-button
+          >
+        </el-form-item>
+      </el-form>
+    </el-dialog>
+    <!-- 验证码 -->
+    <Verify
+      @success="successVerify"
+      :mode="'pop'"
+      :captcha-type="'blockPuzzle'"
+      :imgSize="{ width: '400px', height: '200px' }"
+      ref="verify"
+      class="verify-overlay"
+    ></Verify>
+  </div>
+</template>
+<script setup>
+import { reactive, ref ,watch} from "vue";
+import { ElMessage } from "element-plus";
+import router from "@/router/index.js";
+import Verify from "@/components/verifition/Verify.vue";
+
+//组件自身数据属性
+const props = defineProps({
+  loginDialogVisible: {
+    type: Boolean,
+    required: true
+  }
+})
+const emit = defineEmits(['update:loginDialogVisible']);//定义事件，允许该组件发出这个事件
+const loginDialogVisible = ref(props.loginDialogVisible);
+//检测数据
+watch(()=>props.loginDialogVisible , (newvalue) => {
+  loginDialogVisible.value = newvalue;
+  console.log("组件内loginDialogVisible.value:"+loginDialogVisible.value);
+})
+//关闭
+// 重置表单
+const resetForm = () => {
+  loginPasswordform.username = '';
+  loginPasswordform.password = '';
+  //router.go(-1);
+  emit('update:loginDialogVisible', false)//右子组件为父组件传递值，让父组件来关闭，解决watch无法检测相同值的问题
+};
+
+
+//登录
+const loginPasswordRef = ref();
+const loginPasswordform = reactive({
+  username: "",
+  password: "",
+  captchaVerification: "",
+});
+const loginPasswordRule = reactive({
+  username: [{ required: true, message: "账号不能为空", trigger: "blur" }],
+  password: [{ required: true, message: "密码不能为空", trigger: "blur" }],
+});
+
+// 图片验证码
+const verify = ref();
+// 密码登录前校验
+const loginPasswordSubmitCheck = () => {
+  if (!loginPasswordRef) return;
+  loginPasswordRef.value.validate((valid) => {//规则验证
+    if (valid) {
+      verify.value.show();
+    } else {
+      return false;
+    }
+  });
+};
+// 验证码校验通过
+const successVerify = (param) => {
+  ElMessage.success("图片验证码校验通过");
+  // 发起登录请求
+  try{
+
+  }
+  catch{
+    
+  }
+  resetForm();//关闭
+  //重置网页
+
+};
+
+//外部引用：
+ // <LoginDialog v-model:loginDialogVisible="loginDialogVisible" @update:loginDialogVisible="loginDialogVisible = $event" />
+</script>
+<style scoped>
+.verify-overlay {
+  position: fixed; /* 确保覆盖整个视口 */
+  top: 0;
+  left: 0;
+  z-index: 10000; /* 确保它在其他所有元素上方,数字代表优先级，也就是堆叠数 */
+}
+</style>

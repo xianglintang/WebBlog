@@ -1,0 +1,61 @@
+<template>
+  <el-tabs
+      v-model="activeName"
+      stretch
+  >
+    <el-tab-pane label="Spring" name="1" >
+      <div style="overflow: auto">
+        <div v-for="article in articleList" :key="article.id" class="infinite-list-item">
+          <el-card shadow="hover" >
+            <el-tag  type="success" effect="dark" size="large" >{{article.category_name}}</el-tag>
+            <el-text class="title" type="primary" size="large" truncated>
+              {{article.title}}
+            </el-text>
+            <el-divider style="border-width: 1px;border-color: black "></el-divider>
+            <el-text class="introduce" truncated>
+              {{article.introduce}}
+            </el-text>
+          </el-card>
+        </div>
+      </div>
+    </el-tab-pane>
+    <el-tab-pane label="Unity" name="2">
+      Config
+    </el-tab-pane>
+    <el-tab-pane label="CSharp" name="3">
+      Role
+    </el-tab-pane>
+    <el-tab-pane label="C" name="4">
+      Task
+    </el-tab-pane>
+    <el-tab-pane label="Python" name="5">
+      Task
+    </el-tab-pane>
+    <el-tab-pane label="Other" name="6">
+      Task
+    </el-tab-pane>
+
+  </el-tabs>
+</template>
+
+<script lang="ts" setup>
+import {GetTitleList} from '@/api/article.js'
+import { ref, watch,reactive, onMounted } from 'vue'
+import { useRoute,useRouter } from 'vue-router'
+const route = useRoute()//需要参数
+const router = useRouter()//需要路由，重新刷新
+
+import type { TabsPaneContext } from 'element-plus'
+const articleList = ref([]);
+const activeName = ref('1')
+
+</script>
+
+<style>
+
+:deep(.el-tabs__nav-scroll) {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+</style>

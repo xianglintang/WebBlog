@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tangxianglin.blog.mapper.ArticleMapper">
+    <resultMap id="ArticleVOMap" type="articleVO">
+        <id column="articleId" property="articleId"/>
+        <result column="title" property="title"/>
+        <result column="categoryName" property="categoryName"/>
+        <result column="introduce" property="introduce"/>
+        <result column="content" property="content"/>
+        <result column="adminId" property="adminId"/>
+        <result column="categoryId" property="categoryId"/>
+        <result column="createdTime" property="createdTime"/>
+        <result column="updatedTime" property="updatedTime"/>
+    </resultMap>
+    <!--parameterType取数据，resultMap把sql查询的结果封装在bean里返回回去，是存数据用的-->
+    <!--where标签的作用:如果里面有成立的话,会添加一个where关键字并且会删除掉where 后面的第一个and 或者  or关键子-->
+    <select id="Search" resultMap="ArticleVOMap" parameterType="articleQuery">
+        SELECT
+            a.articleId,
+            a.title,
+            c.categoryName,
+            a.introduce,
+            a.content,
+            a.adminId,
+            a.categoryId,
+            a.createdTime,
+            a.updatedTime
+        FROM
+            articles a,categories c
+        <where>
+            a.categoryId = c.categoryId
+            <if test="title !=null and title !=''">
+                and a.title like CONCAT(#{title},'%')
+            </if>
+        </where>
+    </select>
+    <select id="SearchById" resultMap="ArticleVOMap">
+        SELECT
+            articleId,
+            title,
+            introduce,
+            content,
+            adminId,
+            categoryId,
+            createdTime,
+            updatedTime
+        FROM
+            articles
+        WHERE
+            articleId = #{articleId}
+    </select>
+
+    <!-- id在数据库定义了，我们就不用类型名嵌套索引了-->
+     <select id="SearchBycategoryId" resultMap="ArticleVOMap">
+         SELECT
+             a.articleId,
+             a.title,
+             c.categoryName,
+             a.introduce,
+             a.content,
+             a.adminId,
+             a.categoryId,
+             a.createdTime,
+             a.updatedTime
+         FROM
+             articles a,categories c
+         WHERE
+             a.categoryId = c.categoryId and c.categoryId = #{categoryId}
+     </select>
+
+    <insert id="AddNewArticle" parameterType="article">
+        INSERT INTO articles(title,introduce,content,adminId,categoryId,createdTime,updatedTime)
+        VALUES(#{title},#{introduce},#{content},#{adminId},#{categoryId},#{createdTime},#{updatedTime})
+    </insert>
+</mapper>
