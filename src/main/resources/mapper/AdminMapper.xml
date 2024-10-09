@@ -35,4 +35,17 @@
         WHERE
             email=#{email}
     </select>
+
+    <insert id="registerAdmin" parameterType="admin">
+        INSERT INTO admin(adminName,adminPassword,email)
+        VALUES(#{adminName},#{adminPassword},#{email})
+    </insert>
+
+    <!--是否存在相同名或者邮箱-->
+    <select id="nameIsExist" resultMap="adminVOMap">
+        SELECT adminName FROM admin WHERE adminName=#{adminName}
+    </select>
+    <select id="emailIsExist" resultMap="adminVOMap">
+        SELECT email FROM admin WHERE email=#{email}
+    </select>
 </mapper>

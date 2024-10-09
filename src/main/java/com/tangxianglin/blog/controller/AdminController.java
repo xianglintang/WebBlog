@@ -4,6 +4,7 @@ package com.tangxianglin.blog.controller;
 
 import com.tangxianglin.blog.dto.AdminDTO;
 import com.tangxianglin.blog.exception.ParamException;
+import com.tangxianglin.blog.pojo.Admin;
 import com.tangxianglin.blog.properties.JWTProperties;
 import com.tangxianglin.blog.service.AdminService;
 import com.tangxianglin.blog.service.MailService;
@@ -106,5 +107,68 @@ public class AdminController {
         data.put("adminInfo",adminVO);
 
         return Result.ok("成功",data);
+    }
+
+    @ApiOperation("注册")
+    @PostMapping("/register")
+    public Result<String> register(AdminDTO adminDTO){
+        //检测账号和邮箱是否已存在
+        if(adminService.nameIsExist(adminDTO.getAdminName())!=null){
+            return Result.failure("账号已存在");
+        }
+        if(adminService.emailIsExist(adminDTO.getEmail())!=null){
+            return Result.failure("邮箱已存在");
+        }
+        //然后再检验邮箱验证码
+        String Identifier = adminDTO.getIdentifier();
+        String verificationCode = adminDTO.getEmailCode();
+        //参数的校验
+        if(StringUtil.isEmpty(verificationCode)){
+            throw new ParamException("验证码不能为空");//可以Result.failure，但是会错误引导，后端出错没收到，前端以为数据为空但实际不空，
+        }
+        //验证验证码
+        if(!verificationCodeService.verifyCode(verificationCode , Identifier)){
+            return Result.failure("验证码错误或者已过期");
+        }
+
+        Admin admin = new Admin();
+        admin.setAdminName(adminDTO.getAdminName());
+        admin.setAdminPassword(adminDTO.getAdminPassword());
+        admin.setEmail(adminDTO.getEmail());
+        System.out.println("adminName:"+admin.getAdminName()+"，adminPassword:"+admin.getAdminPassword());
+        //参数的校验
+        if(StringUtil.isEmpty(admin.getAdminName()) || StringUtil.isEmpty(admin.getAdminPassword()) || StringUtil.isEmpty(admin.getEmail())){
+            throw new ParamException("账号和密码和邮箱都不能为空");
+        }
+        adminService.registerAdmin(admin);
+        return Result.ok("注册成功");
+    }
+    @ApiOperation("账号是否已注册")
+    @PostMapping("/register/adminNameIsExist")
+    public Result<AdminVO> nameIsExist(String adminName){//@RequestParam默认处理请求参数，导致json无法解析，因为默认请求application/x-www-form-urlencoded
+        System.out.println("adminName:"+adminName);
+        AdminVO adminVO = adminService.nameIsExist(adminName);
+        if(adminVO!=null){
+            adminVO.setAdminNameIsExist(true);
+            return Result.ok("已注册",adminVO);
+        }
+        else{
+            adminVO = new AdminVO();
+            return Result.ok("可注册",adminVO);
+        }
+    }
+    @ApiOperation("邮箱是否已注册")
+    @PostMapping("/register/emailIsExist")
+    public Result<AdminVO> emailIsExist(String email){
+        System.out.println("email:"+email);
+        AdminVO adminVO = adminService.emailIsExist(email);
+        if(adminVO!=null){
+            adminVO.setEmailIsExist(true);
+            return Result.ok("已注册",adminVO);
+        }
+        else{
+            adminVO = new AdminVO();
+            return Result.ok("可注册",adminVO);
+        }
     }
 }

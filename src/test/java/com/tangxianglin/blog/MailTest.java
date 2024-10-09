@@ -14,7 +14,7 @@ public class MailTest {
         mailSender.setHost("smtp-mail.outlook.com");//新版
         mailSender.setPort(587);
         mailSender.setUsername("xianglintang@outlook.com");
-        mailSender.setPassword("********");
+        mailSender.setPassword("KVKG9-93XEW-6EZB6-WEWT5-Q3ZKP");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
@@ -28,7 +28,7 @@ public class MailTest {
         message.setSubject("Test Mail");
         message.setText("This is a test mail.");*/
 
-        //qq邮箱,校园网不可以，热点发邮件慢，但是好歹可以发送，反正异步
+        //qq邮箱,校园网不可以，发邮件慢
         // 创建邮件发送器
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
@@ -37,8 +37,8 @@ public class MailTest {
         mailSender.setPort(587);
 
         // 设置发送方的 QQ 邮箱地址和授权码（注意不是邮箱密码）
-        mailSender.setUsername("2280793613@qq.com");
-        mailSender.setPassword("******");  // 替换为你的授权码
+        mailSender.setUsername("*******@qq.com");
+        mailSender.setPassword("*****");  // 替换为你的授权码
 
         // 设置邮件的其他属性
         Properties props = mailSender.getJavaMailProperties();

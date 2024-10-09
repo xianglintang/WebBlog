@@ -60,4 +60,16 @@ public class MailController {
         mailService.sendCodeMail(email, "验证码", content);
         return Result.ok("验证码已发送");
     }
+    @ApiOperation("验证码验证")
+    @PostMapping("/verifycode")
+    public Result<String> verifycode(AdminDTO adminDTO){
+        String inputCode = adminDTO.getEmailCode();
+        String identifier = adminDTO.getIdentifier();
+        boolean result = verificationCodeService.verifyCode(inputCode, identifier);
+        if (result) {
+            return Result.ok("验证通过");
+        } else {
+            return Result.failure("验证码错误或已经过期");
+        }
+    }
 }

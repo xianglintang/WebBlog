@@ -1,14 +1,22 @@
 <template>
-      <button @click="editArticle" class="edit-button">Edit</button>
-  <div  class="article-container">
+  <div>
+    <button @click="editArticle" class="edit-button">Edit</button>z
     <!-- 大纲部分 -->
-    <TableOfContents class="Table-body" :headings="headings" :scrollToHeading="scrollToHeading"/>
+    <div v-if="outline.length">
+      <h3>大纲</h3>
+      <ul>
+        <li v-for="item in outline" :key="item.id">
+          <a :href="'#' + item.id">{{ item.title }}</a>
+        </li>
+      </ul>
+    </div>
 
     <div 
       v-html="CurrentArticle" 
       class="markdown-body" 
       style="font-size: small" 
       v-highlight
+      @load="generateOutline"
     ></div>
   </div>
 </template>
@@ -22,14 +30,12 @@ import { useRoute,useRouter } from 'vue-router';
 import router from "@/router/index.js";
 //md导入，由于我们后端已经完成了md转html，所以前端不用转，现在是搞样式和代码高亮
 import 'github-markdown-css'
-import TableOfContents from '@/components/TableOfContents.vue'; // 导入目录组件
 
 const route = useRoute();//需要参数
 
 const CurrentArticle = ref(null);
 const articleId = reactive({articleId:''});
-const headings = ref([]);
-
+const outline = ref([]); // 存储大纲
 //文章id是否变化,，变化重新根据id搜索
 watch(() => route.query.articleId, (NewarticleId) => {
   // 检测搜索值是否变化,，变化则执行下去
@@ -41,9 +47,9 @@ watch(() => route.query.articleId, (NewarticleId) => {
   try{
       //id查找
       SearchById(articleId.articleId).then(res=>{
-      //CurrentArticle.value=res.data;//传来后端解析md文件转为html数据
-      //console.log(CurrentArticle.value)
-      processContent(res.data);
+      CurrentArticle.value=res.data;//传来后端解析md文件转为html数据
+      generateOutline(); // 每次加载新内容时生成大纲
+      console.log(CurrentArticle.value)
     })
   }
   catch(error){
@@ -52,34 +58,22 @@ watch(() => route.query.articleId, (NewarticleId) => {
 
 },{ immediate: true });
 
-function processContent(content) {
-  const parser = new DOMParser();
-  const doc = parser.parseFromString(content, 'text/html');
-  const hTags = doc.querySelectorAll('h1, h2, h3'); // 选择需要的标题标签
+// 生成大纲
+const generateOutline = () => {
+  // 使用正则匹配 h1, h2, h3 等标题
+  const tempDiv = document.createElement('div');
+  tempDiv.innerHTML = CurrentArticle.value;
+  outline.value = Array.from(tempDiv.querySelectorAll('h1, h2, h3')).map((heading, index) => ({
+    id: `heading-${index}`, // 生成唯一 ID
+    title: heading.innerText,
+  }));
 
-  // 为每个标题生成唯一 ID
-  headings.value = Array.from(hTags).map((h, index) => {
-    const id = `heading-${index}`; // 生成唯一 ID
-    h.id = id; // 设置标题 ID
-    return { id, text: h.textContent };
+  // 为每个标题添加 ID
+  outline.value.forEach((item, index) => {
+    tempDiv.querySelectorAll('h1, h2, h3')[index].id = item.id;
   });
-
-  CurrentArticle.value = doc.body.innerHTML; // 将处理后的 HTML 设置为内容
-}
-// 用于传递给大纲组件的滚动函数
-const scrollToHeading = (id) => {
-  const headingElement = document.getElementById(id);
-  if (headingElement) {
-    const offset = 100; // 根据需要调整偏移量
-    const elementPosition = headingElement.getBoundingClientRect().top;
-    const offsetPosition = elementPosition + window.pageYOffset - offset;
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: 'smooth',
-    });
-  }
+  CurrentArticle.value = tempDiv.innerHTML; // 更新带有 ID 的 HTML 内容
 };
-
 // 编辑文章函数
 const editArticle = () => {
   // 跳转到编辑页面，传递文章 ID
@@ -88,23 +82,13 @@ const editArticle = () => {
 </script>
 
 <style scoped>
-.article-container {
-  display: flex; /* 使用 flexbox 布局 */
-}
-.markdown-body {
-  margin-left: 220px; 
-}
-/*.Table-body{
-  margin:0auto;
-}*/
-/*
 .markdown-body {
   box-sizing: border-box;
-  
   min-width: 200px;
   max-width: 980px;
+  margin: 0 auto;
   padding: 45px;
-}*/
+}
 
 @media (max-width: 767px) {
   .markdown-body {

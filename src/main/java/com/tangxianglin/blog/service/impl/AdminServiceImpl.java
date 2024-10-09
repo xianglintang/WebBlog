@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.tangxianglin.blog.mapper.AdminMapper;
+import com.tangxianglin.blog.pojo.Admin;
 import com.tangxianglin.blog.service.AdminService;
 import com.tangxianglin.blog.utils.PageResult;
 import com.tangxianglin.blog.vo.AdminVO;
@@ -36,4 +37,17 @@ public class AdminServiceImpl implements AdminService {
         return adminMapper.loginByEmail(email);
     }
 
+    @Override
+    public void registerAdmin(Admin admin) {
+        admin.setAdminPassword(DigestUtils.md5DigestAsHex((admin.getAdminPassword()+salt).getBytes()));
+        adminMapper.registerAdmin(admin);
+    }
+    @Override
+    public AdminVO emailIsExist(String email) {
+        return adminMapper.emailIsExist(email);
+    }
+    @Override
+    public AdminVO nameIsExist(String adminName) {
+        return adminMapper.nameIsExist(adminName);
+    }
 }

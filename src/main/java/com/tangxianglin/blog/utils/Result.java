@@ -42,6 +42,7 @@ public class Result<T> {
         Result result = new Result();
         result.setMsg(msg);
         result.setCode(500);
+        System.out.println(result);
         return result;
     }
 

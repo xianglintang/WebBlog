@@ -73,4 +73,12 @@
         INSERT INTO articles(title,introduce,content,adminId,categoryId,createdTime,updatedTime)
         VALUES(#{title},#{introduce},#{content},#{adminId},#{categoryId},#{createdTime},#{updatedTime})
     </insert>
+    <update id="UpdateArticle" parameterType="article">
+        UPDATE articles
+        SET title = #{title},
+            introduce = #{introduce},
+            categoryId = #{categoryId},
+            updatedTime = #{updatedTime}
+        WHERE articleId = #{articleId}
+    </update>
 </mapper>

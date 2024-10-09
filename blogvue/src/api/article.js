@@ -19,7 +19,13 @@ export function SearchById(id){
     }
     return request(param);
 }
-
+export function GetArticleByIdNoHTML(id){
+    let param = {
+        url:"/article/nohtml/"+id,
+        method:"GET",
+    }
+    return request(param);
+}
 //title那边按类别的
 export function SearchByCategory_Id(id){
     let param = {
@@ -33,6 +39,19 @@ export function SearchByCategory_Id(id){
 export function UploadArticle(data,config = {}){
     let param = {
         url:"/article/uploadArticle",
+        method:"POST",
+        data:data,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        ...config
+    }; 
+    return request(param);
+}
+//修改文章
+export function UpdateArticle(data,config = {}){
+    let param = {
+        url:"/article/update",
         method:"POST",
         data:data,
         headers: {

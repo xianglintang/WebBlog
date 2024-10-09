@@ -1,7 +1,7 @@
 server:
   port: 80
   #servlet:
-  #  context-path: /dd  ,可以多个子目录来区分路径，共存多个应用，但是目前不需要
+  #  context-path: /z   ,可以多个子目录来区分路径，共存多个应用，但是目前不需要
 spring:
   task:
     execution:
@@ -26,8 +26,8 @@ spring:
   mail:
     host: smtp.qq.com #smtp-mail.outlook.com #smtp.office365.com
     port: 587
-    username: ****@qq.com
-    password: ****  # 登录密码或者授权码
+    username: *********@qq.com
+    password: *****  # 邮箱授权码
     properties:
       mail:
         smtp:
@@ -41,7 +41,7 @@ spring:
 aj:
   captcha:
     # 缓存类型,local或者reids
-    cache-type: redis #local
+    cache-type: local # redis #local
     # blockPuzzle 滑块 clickWord 文字点选  default默认两者都实例化
     type: blockPuzzle
     # 校验滑动拼图允许误差偏移量(默认5像素)
@@ -64,5 +64,10 @@ tom:
   jwt:
     secure: 123456
     expire: 36000
+  aliyunoss:
+    endpoint: ********
+    access-key-id: ****
+    access-key-secret: *****
+    bucket-name: webblog-articles-images
 articleFiles:
   prepath: mdfiles/

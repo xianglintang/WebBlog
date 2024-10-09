@@ -27,7 +27,7 @@ public class MyWebConfig extends WebMvcConfigurationSupport {
     @Override
     protected void addInterceptors(InterceptorRegistry registry) {
         //addPathPatterns()为拦截哪些路径，"/"就是全部不拦截，excludePathPatterns是不拦截的路径，/admin/**代表admin路径后面下全部
-        registry.addInterceptor(adminLoginInterceptor).addPathPatterns("/admin/**").excludePathPatterns("/admin/login","/admin/verifycode");
+        registry.addInterceptor(adminLoginInterceptor).addPathPatterns("/admin/**").excludePathPatterns("/admin/login","/admin/verifycode","/admin/register","/admin/register/**");
     }
 
     @Bean
@@ -38,7 +38,7 @@ public class MyWebConfig extends WebMvcConfigurationSupport {
     @Bean
     public Docket createDocket() {
         ApiInfo apiInfo = new ApiInfoBuilder()
-            .title("个人博客项目接口文档admin")
+            .title("在线写作平台接口文档admin")
             .version("1.0")
             .description("个人博客项目接口文档admin")
             .build();

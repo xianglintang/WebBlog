@@ -4,20 +4,18 @@
   <div class="container">
     <!-- 留言按钮 -->
     <el-button type="primary" @click="MessageDrawerVisible = true" class="MessageButton">留言</el-button>
-    <!-- 上传文件按钮 -->
-    <el-button type="primary" @click="FileDrawerVisible = true" class="MessageButton">上传文章</el-button>
     <!-- 引入留言抽屉组件 -->
     <MessageDrawer v-model:drawerVisible="MessageDrawerVisible"  @update:drawerVisible="MessageDrawerVisible = $event"/>
   </div>
 </template>
 
 <script setup>
-import {ref, reactive} from 'vue'
-import MessageDrawer from '@/components/MessageDrawer.vue'
+import {ref, reactive} from 'vue';
+import MessageDrawer from '@/components/MessageDrawer.vue';
+import router from "@/router/index.js";
+import {UploadFile} from "@/api/test.js";
 
 const MessageDrawerVisible = ref(false); // 控制留言抽屉的显示与隐藏
-const FileDrawerVisible = ref(false);
-
 const handleVerified = () => {
   showCaptcha.value = false;
   submitMessage();

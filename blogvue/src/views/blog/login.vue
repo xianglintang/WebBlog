@@ -7,6 +7,12 @@
       ref="loginPasswordRef"
       class="login-form"
     >
+      <el-form-item>
+        <el-radio-group v-model="loginMode">
+          <el-radio label="password">密码登录</el-radio>
+          <el-radio label="email">邮箱验证码登录</el-radio>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item v-if="loginMode === 'password'" prop="adminName">
         <el-input
           v-model="loginForm.adminName"
@@ -16,6 +22,7 @@
       </el-form-item>
       <el-form-item v-if="loginMode === 'password'" prop="adminPassword">
         <el-input
+          style="width: 75%;"
           show-password
           type="password"
           placeholder="请输入密码"
@@ -23,6 +30,12 @@
           prefix-icon="Lock"
         >
         </el-input>
+        <el-button
+          style="width: 25%;"
+          type="primary"
+          @click="BeforesendEmailCode"
+          >忘记密码?</el-button
+        >
       </el-form-item>
       <el-form-item v-if="loginMode === 'email'" prop="email">
         <el-input
@@ -31,13 +44,15 @@
           prefix-icon="Message"
         />
       </el-form-item>
-      <el-form-item v-if="loginMode === 'email'" prop="emailCode">
+      <el-form-item v-if="loginMode === 'email'" prop="emailCode" >
         <el-input
+          style="width: 70%;"
           v-model="loginForm.emailCode"
           placeholder="请输入验证码"
           prefix-icon="Lock"
         />
         <el-button
+          style="width: 30%;"
           type="primary"
           :disabled="isCounting"
           @click="BeforesendEmailCode"
@@ -53,10 +68,12 @@
         >
       </el-form-item>
       <el-form-item>
-        <el-radio-group v-model="loginMode">
-          <el-radio label="password">密码登录</el-radio>
-          <el-radio label="email">邮箱验证码登录</el-radio>
-        </el-radio-group>
+        <el-button
+          type="primary"
+          style="width: 100%"
+          @click="RegisterDrawerVisible = true"
+          >注册</el-button
+        >
       </el-form-item>
     </el-form>
     <!-- 验证码 -->
@@ -68,6 +85,8 @@
       ref="verify"
       class="verify-overlay"
     ></Verify>
+    <!--注册-->
+    <RegisterDrawer v-model:drawerVisible="RegisterDrawerVisible"  @update:drawerVisible="RegisterDrawerVisible = $event"/>
   </div>
 </template>
 <script setup>
@@ -79,6 +98,8 @@ import {Login,LoginMail} from "@/api/admin.js";
 import {SendCode} from "@/api/mail.js"; 
 import { useSystemStore } from '@/stores/system';
 import { v4 as uuidv4 } from "uuid";
+import RegisterDrawer from "@/components/RegisterDrawer.vue";
+
 //关闭
 // 重置表单
 /*
@@ -86,7 +107,8 @@ const resetForm = () => {
   loginForm.adminName = '';
   loginForm.adminPassword = '';
 };*/
-
+//注册
+const RegisterDrawerVisible = ref(false); // 控制注册抽屉的显示与隐藏
 
 //登录
 const store = useSystemStore();//保存token

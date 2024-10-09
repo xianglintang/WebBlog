@@ -6,6 +6,7 @@ import search from '../views/blog/search.vue';
 import article from '../views/blog/article.vue';
 import login from '../views/blog/login.vue';
 import admin from '../views/blog/admin.vue';
+import articleEditor from '../views/blog/articleEditor.vue';
 
 const routes = [
     {
@@ -46,7 +47,12 @@ const routes = [
         path: '/admin',
         name: 'admin',
         component: admin,
-    }
+    },
+    {
+        path: '/articleEditor',
+        name: 'articleEditor',
+        component: articleEditor,
+    },
 ];
 
 const router = createRouter({

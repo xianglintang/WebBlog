@@ -19,4 +19,6 @@ public interface ArticleMapper {
     ArticleVO SearchById(@Param("articleId") long articleId);
 
     void AddNewArticle(Article article);
+
+    void UpdateArticle(Article article);
 }

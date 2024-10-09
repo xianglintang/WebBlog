@@ -7,6 +7,7 @@ import java.util.Date;
 
 @Data
 public class ArticleDTO {
+    private int articleId;
     private String title;
     private String introduce;
     private MultipartFile file;//文件数据，到pojo那边前，转移到好的路径，然后转化为路径即可

@@ -13,9 +13,10 @@ public interface ArticleService {
     List<ArticleVO> Search(ArticleQuery articleQuery);
     //根据id查找
     String SearchById(long articleId);
-
+    ArticleVO GetMarkdownContentByIdNoHTML(long articleId);
     //那几个类型的tab-pane，这个不用分页
     List<ArticleVO> SearchBycategoryId(long categoryId);
 
     void AddNewArticle(Article article);
+    void UpdateArticle(Article article);
 }

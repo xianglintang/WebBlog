@@ -7,5 +7,7 @@ import App from './App.vue'
 import locale from 'element-plus/dist/locale/zh-cn'
 import highlight from '@/utils/highlight.js';
 import { createPinia } from 'pinia';
+import 'easymde/dist/easymde.min.css';//引入md编辑样式
+
 //const app = createApp(App)
 createApp(App).directive('highlight', highlight).use(ElementPlus,{locale}).use(router).use(createPinia()).mount('#app');

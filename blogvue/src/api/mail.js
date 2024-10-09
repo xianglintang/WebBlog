@@ -21,3 +21,14 @@ export function SendCode(data){
     }
     return request(param);
 }
+
+//邮箱验证码验证,这个是注册的，与登录的不同，没有设置token也没有返回数据
+export function VerifyCode(data){
+    let url = "/api/mail/verifycode";
+    let param = {
+        url:url,
+        method:"POST",
+        data:qs.stringify(data)
+    }
+    return request(param);
+}
