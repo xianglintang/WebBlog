@@ -1,5 +1,5 @@
 ## WebBlog (v0.5.1)
-#### 项目简述：个人开发的前后端分离在线笔记系统
+#### 项目简述：团队开发的前后端分离在线笔记系统
 #### 技术栈：Vue3, Axios, ElementUI, Springboot, Mysql, AJ-Captcha, JWT, Redis, Flexmark, Vditor, OSS等
 #### 项目概述: 该系统实现了从前端页面展示到后端数据存储与交互的完整流程，应用 Vue3 进行前端开发，配合SpringBoot 后端 API 实现留言功能，文章分类，模糊搜索文章，上传文章，文章阅读，文章编辑，登录注册等功能。
 #### 主要特点：
