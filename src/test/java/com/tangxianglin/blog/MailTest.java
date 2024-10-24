@@ -14,7 +14,7 @@ public class MailTest {
         mailSender.setHost("smtp-mail.outlook.com");//新版
         mailSender.setPort(587);
         mailSender.setUsername("xianglintang@outlook.com");
-        mailSender.setPassword("KVKG9-93XEW-6EZB6-WEWT5-Q3ZKP");
+        mailSender.setPassword("***********");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
