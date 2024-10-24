@@ -28,7 +28,7 @@ public class MailTest {
         message.setSubject("Test Mail");
         message.setText("This is a test mail.");*/
 
-        //qq邮箱,校园网不可以，发邮件慢
+        //qq邮箱,校园网不可以，发邮件慢，不过异步可以解决
         // 创建邮件发送器
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 
