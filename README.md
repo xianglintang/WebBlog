@@ -10,6 +10,7 @@ Vue3, Axios, ElementUI, Springboot, Mysql, AJ-Captcha, JWT, Redis, Flexmark, Vdi
 后端使用MyBatis框架设计并实现多个Mapper接口及对应的XML文件，用于Mysql数据库操作，如文章的增删改查、文章分类、模糊搜索等功能。
 ##### 二、文章阅读: 
 后端Flexmark插件将Markdown文件数据转为HTML标签数据，前端通过v-html嵌入 Vue 3 页面，保持格式不变。前端同时构建代码区域高亮，并支持一键复制文章内的代码。
+但是我并没有过滤嵌入v-html前的标签字符串，所以不要上线，容易出问题。
 ##### 三、文章编辑：
 ###### 支持文章内容编辑：
 前端集成Vditor富文本编辑器，可在线编写并导出Markdown文章，可以开启所见即所得，实时渲染，分屏预览功能。同时可对旧文章进行精确更改。
